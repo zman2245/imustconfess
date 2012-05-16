@@ -14,7 +14,7 @@ mkdir $TMPDIR
 cd $TMPDIR
 
 # get the latest and greatest codes
-git clone zack@gamesprediction.com:code/testsite
+git clone zack@gamesprediction.com:code/imustconfess
 
 # use the proper path.php file
 echo "Setting the proper path file";
