@@ -4,7 +4,7 @@
 # This script clones the repo to a temp directory and copies
 # the cloned code to Linode.
 
-TMPDIR="/tmp/deploy_linode"
+TMPDIR="/tmp/deploy_linode_imustconfess"
 
 if [ -d "$TMPDIR" ]; then
 	rm -rf $TMPDIR
@@ -18,11 +18,11 @@ git clone zack@gamesprediction.com:code/testsite
 
 # use the proper path.php file
 echo "Setting the proper path file";
-cp $TMPDIR/testsite/htdocs/Paths/path_linode.php $TMPDIR/testsite/htdocs/Paths/path.php
+cp $TMPDIR/imustconfess/htdocs/Paths/path_linode.php $TMPDIR/imustconfess/htdocs/Paths/path.php
 
 # copy that shizz
 echo "Deploying!! ...."
-scp -r testsite/* zack@gamesprediction.com:/home/zack/public/gamesprediction.com/public/testsite/
+scp -r imustconfess/* zack@gamesprediction.com:/home/zack/public/i-must-confess.com/public/
 
 # remove the tmp dir
 echo "Deploy done, cleaning up"
