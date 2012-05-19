@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DB_NAME="baseball"
+DB_SERVER="localhost"
+DB_USERNAME="zack"
+DB_PWD="zacksql2245"
+OUTPUT_DIR="/var/www/baseball/lib/datamodel/generator/phpdaogen/temp"
+DAO_DIR="/var/www/baseball/lib/dao/sql"
+DATAMODEL_DIR="/var/www/baseball/lib/datamodel/sql"
+
+echo "Generating DAO and VO"
+php daogen.php $DB_SERVER $DB_USERNAME $DB_PWD $DB_NAME $OUTPUT_DIR
+echo "Moving Dao files to $DAO_DIR"
+mv $OUTPUT_DIR/*Dao* $DAO_DIR
+echo "Moving Datamodels to $DATAMODEL_DIR"
+mv $OUTPUT_DIR/MySQLConnection.php ~
+mv $OUTPUT_DIR/PreparedStatement.php ~
+mv $OUTPUT_DIR/SQLServerConnection.php ~
+mv $OUTPUT_DIR/Connection.php ~
+mv $OUTPUT_DIR/daogen.php ~
+mv $OUTPUT_DIR/* $DATAMODEL_DIR
+mv ~/MySQLConnection.php $OUTPUT_DIR
+mv ~/PreparedStatement.php $OUTPUT_DIR
+mv ~/SQLServerConnection.php $OUTPUT_DIR
+mv ~/Connection.php $OUTPUT_DIR
+mv ~/daogen.php $OUTPUT_DIR
