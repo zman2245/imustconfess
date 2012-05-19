@@ -15,19 +15,21 @@ class ConfessionsDao {
 	}
 
 	public function insert($Confessions) {
-		$ps = new PreparedStatement("insert into Confessions (src_ip, title, body) values (?, ?, ?)");
+		$ps = new PreparedStatement("insert into Confessions (src_ip, title, body, timestamp) values (?, ?, ?, ?)");
 		$ps->setInt($Confessions->src_ip);
 		$ps->setString($Confessions->title);
 		$ps->setString($Confessions->body);
+		$ps->setInt($Confessions->timestamp);
 		$this->connection->executeUpdate($ps);
 		$Confessions->id = $this->connection->getLastInsertId();
 	}
 
 	public function update($Confessions) {
-		$ps = new PreparedStatement("update Confessions set src_ip = ?, title = ?, body = ? where id = ?");
+		$ps = new PreparedStatement("update Confessions set src_ip = ?, title = ?, body = ?, timestamp = ? where id = ?");
 		$ps->setInt($Confessions->src_ip);
 		$ps->setString($Confessions->title);
 		$ps->setString($Confessions->body);
+		$ps->setInt($Confessions->timestamp);
 		$ps->setInt($Confessions->id);
 		$this->connection->executeUpdate($ps);
 	}
@@ -108,6 +110,17 @@ class ConfessionsDao {
 
 	public function findByBody($body, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
 		return $this->findWithPreparedStatement($this->findByBodyPS($body, $queryOperator, $orderBy, $offset, $limit));
+	}
+
+	public function findByTimestampPS($timestamp, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		if (!in_array($queryOperator, ConfessionsDao::$ALLOWED_NUMERIC_QUERY_OPERATORS)) $queryOperator = ConfessionsDao::$ALLOWED_NUMERIC_QUERY_OPERATORS[0];
+		$ps = new PreparedStatement("select * from Confessions where timestamp $queryOperator ?".((($orderBy!==null)&&($orderBy!='')) ? (' order by '.$orderBy) : ''), $offset, $limit);
+		$ps->setInt($timestamp);
+		return $ps;
+	}
+
+	public function findByTimestamp($timestamp, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		return $this->findWithPreparedStatement($this->findByTimestampPS($timestamp, $queryOperator, $orderBy, $offset, $limit));
 	}
 
 	public function findAllPS($orderBy = null, $offset = 0, $limit = 0) {

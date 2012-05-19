@@ -8,10 +8,11 @@ $ip = 999111222;
 $dao    = Factory::dao('ConfessionsDao');
 $struct = Factory::struct('Confessions');
 
-$struct->id     = 1;
-$struct->src_ip = $ip;
-$struct->title  = "Test Title";
-$struct->body   = "This is the body of the message";
+$struct->id     	= 1;
+$struct->src_ip 	= $ip;
+$struct->title  	= "Test Title";
+$struct->body   	= "This is the body of the message";
+$struct->timestamp 	= time();
 
 $dao->insert($struct);
 

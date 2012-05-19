@@ -16,7 +16,8 @@ function createTables()
 				id INT AUTO_INCREMENT PRIMARY KEY,
 				src_ip INT,
 				title TINYTEXT,
-				body TEXT
+				body TEXT,
+				timestamp INT
 				)");
 	
 	print mysql_error();
@@ -26,7 +27,8 @@ function createTables()
 					id INT AUTO_INCREMENT PRIMARY KEY,
 					src_ip INT,
 					title TINYTEXT,
-					body TEXT
+					body TEXT,
+					timestamp INT
 					)");
 	
 	print mysql_error();

@@ -9,12 +9,14 @@ class ConfessionsSubmitted {
 	public $src_ip;
 	public $title;
 	public $body;
+	public $timestamp;
 
 	public function defaultAllFields() {
 		$this->id = null;
 		$this->src_ip = null;
 		$this->title = null;
 		$this->body = null;
+		$this->timestamp = null;
 	}
 
 	public function loadFromArray($arr) {
@@ -22,6 +24,7 @@ class ConfessionsSubmitted {
 		$this->src_ip = isset($arr['src_ip']) ? (int)$arr['src_ip'] : null;
 		$this->title = isset($arr['title']) ? (string)$arr['title'] : null;
 		$this->body = isset($arr['body']) ? (string)$arr['body'] : null;
+		$this->timestamp = isset($arr['timestamp']) ? (int)$arr['timestamp'] : null;
 		return $this;
 	}
 	public function getId() {
@@ -40,6 +43,10 @@ class ConfessionsSubmitted {
 		return $this->body;
 	}
 
+	public function getTimestamp() {
+		return $this->timestamp;
+	}
+
 	public function setId($id) {
 		$this->id= $id;
 	}
@@ -54,6 +61,10 @@ class ConfessionsSubmitted {
 
 	public function setBody($body) {
 		$this->body= $body;
+	}
+
+	public function setTimestamp($timestamp) {
+		$this->timestamp= $timestamp;
 	}
 
 }

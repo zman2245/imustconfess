@@ -15,19 +15,21 @@ class ConfessionsSubmittedDao {
 	}
 
 	public function insert($ConfessionsSubmitted) {
-		$ps = new PreparedStatement("insert into ConfessionsSubmitted (src_ip, title, body) values (?, ?, ?)");
+		$ps = new PreparedStatement("insert into ConfessionsSubmitted (src_ip, title, body, timestamp) values (?, ?, ?, ?)");
 		$ps->setInt($ConfessionsSubmitted->src_ip);
 		$ps->setString($ConfessionsSubmitted->title);
 		$ps->setString($ConfessionsSubmitted->body);
+		$ps->setInt($ConfessionsSubmitted->timestamp);
 		$this->connection->executeUpdate($ps);
 		$ConfessionsSubmitted->id = $this->connection->getLastInsertId();
 	}
 
 	public function update($ConfessionsSubmitted) {
-		$ps = new PreparedStatement("update ConfessionsSubmitted set src_ip = ?, title = ?, body = ? where id = ?");
+		$ps = new PreparedStatement("update ConfessionsSubmitted set src_ip = ?, title = ?, body = ?, timestamp = ? where id = ?");
 		$ps->setInt($ConfessionsSubmitted->src_ip);
 		$ps->setString($ConfessionsSubmitted->title);
 		$ps->setString($ConfessionsSubmitted->body);
+		$ps->setInt($ConfessionsSubmitted->timestamp);
 		$ps->setInt($ConfessionsSubmitted->id);
 		$this->connection->executeUpdate($ps);
 	}
@@ -108,6 +110,17 @@ class ConfessionsSubmittedDao {
 
 	public function findByBody($body, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
 		return $this->findWithPreparedStatement($this->findByBodyPS($body, $queryOperator, $orderBy, $offset, $limit));
+	}
+
+	public function findByTimestampPS($timestamp, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		if (!in_array($queryOperator, ConfessionsSubmittedDao::$ALLOWED_NUMERIC_QUERY_OPERATORS)) $queryOperator = ConfessionsSubmittedDao::$ALLOWED_NUMERIC_QUERY_OPERATORS[0];
+		$ps = new PreparedStatement("select * from ConfessionsSubmitted where timestamp $queryOperator ?".((($orderBy!==null)&&($orderBy!='')) ? (' order by '.$orderBy) : ''), $offset, $limit);
+		$ps->setInt($timestamp);
+		return $ps;
+	}
+
+	public function findByTimestamp($timestamp, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		return $this->findWithPreparedStatement($this->findByTimestampPS($timestamp, $queryOperator, $orderBy, $offset, $limit));
 	}
 
 	public function findAllPS($orderBy = null, $offset = 0, $limit = 0) {
