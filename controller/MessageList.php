@@ -1,5 +1,6 @@
 <?php
 namespace controller;
+use lib\datamodel\sql\Confessions;
 
 class MessageList implements Controller
 {
@@ -9,6 +10,20 @@ class MessageList implements Controller
 	 */
 	public function run($result)
 	{
-		$result->name = "Zack";
+		$messages = array();
+		
+		for ($i = 0; $i < 10; $i++)
+		{
+			$m = new Confessions;
+			$m->body = "Hello there: $i";
+			$m->id   = $i;
+			$m->src_ip = "3.3.3.3";
+			$m->timestamp = time();
+			$m->title = "Test title";
+			
+			$messages[] = $m;
+		}
+		
+		$result->messages = $messages;
 	}
 }

@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+.content {
+	margin-left:auto;
+	margin-right:auto;
+	width:50%;
+}
+
+.content .message {
+	background-color: #0000FF;
+	border: 10px solid gray;
+	margin: 20px;
+}
+
+.content p {
+	font-size: 12px;
+}
+
+.content .timestamp {
+	font-size: 10px;
+	font-style: italic;
+}

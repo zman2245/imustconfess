@@ -22,7 +22,7 @@ class FrontController
 	 */
 	private static $sitemapTpl =
 	array(
-		""					=> "index.tpl",
+		""					=> "messages_main.tpl",
 		"admin/submitted"	=> "index.tpl",
 	);
 	
@@ -52,7 +52,7 @@ class FrontController
 		
 		foreach ($results as $key=>$val)
 		{
-			$smarty->assign($key, $val);
+			$smarty->assign_by_ref($key, $val);
 		}
 
 		$smarty->display($template);

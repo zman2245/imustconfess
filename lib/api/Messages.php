@@ -15,6 +15,8 @@ class Messages
 	 * @param $offest      Offset of message to retrieve
 	 * @param $limit       The number of messages to fetch, starting at the offset
 	 * @param $submissions If true, fetch curated messages, otherwise fetch non-curated messages
+	 * 
+	 * @return An array of Confessions
 	 */
 	public function getMessages($offset, $limit, $submissions = false)
 	{
