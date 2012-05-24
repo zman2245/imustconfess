@@ -1,7 +1,8 @@
 <?php
 namespace controller;
+use lib\api\Messages;
 
-class MessageList implements Controller
+class AdminMessageList implements Controller
 {
 	/**
 	 * (non-PHPdoc)
@@ -9,6 +10,7 @@ class MessageList implements Controller
 	 */
 	public function run($result)
 	{
-		
+		$api = new Messages();
+		$result->messages = $api->getMessages(0, 10, true);
 	}
 }

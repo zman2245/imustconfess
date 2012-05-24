@@ -7,6 +7,7 @@ namespace lib\datamodel\sql;
 class Confessions {
 	public $id;
 	public $src_ip;
+	public $author;
 	public $title;
 	public $body;
 	public $timestamp;
@@ -14,6 +15,7 @@ class Confessions {
 	public function defaultAllFields() {
 		$this->id = null;
 		$this->src_ip = null;
+		$this->author = null;
 		$this->title = null;
 		$this->body = null;
 		$this->timestamp = null;
@@ -22,6 +24,7 @@ class Confessions {
 	public function loadFromArray($arr) {
 		$this->id = isset($arr['id']) ? (int)$arr['id'] : null;
 		$this->src_ip = isset($arr['src_ip']) ? (int)$arr['src_ip'] : null;
+		$this->author = isset($arr['author']) ? (string)$arr['author'] : null;
 		$this->title = isset($arr['title']) ? (string)$arr['title'] : null;
 		$this->body = isset($arr['body']) ? (string)$arr['body'] : null;
 		$this->timestamp = isset($arr['timestamp']) ? (int)$arr['timestamp'] : null;
@@ -33,6 +36,10 @@ class Confessions {
 
 	public function getSrc_ip() {
 		return $this->src_ip;
+	}
+
+	public function getAuthor() {
+		return $this->author;
 	}
 
 	public function getTitle() {
@@ -53,6 +60,10 @@ class Confessions {
 
 	public function setSrc_ip($src_ip) {
 		$this->src_ip= $src_ip;
+	}
+
+	public function setAuthor($author) {
+		$this->author= $author;
 	}
 
 	public function setTitle($title) {

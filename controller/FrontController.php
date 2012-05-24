@@ -15,6 +15,7 @@ class FrontController
 	array(
 		"" 					=> "MessageList",
 		"admin/submitted" 	=> "AdminMessageList",
+		"post_new"			=> "MessagePost",
 	);
 	
 	/**
@@ -23,7 +24,8 @@ class FrontController
 	private static $sitemapTpl =
 	array(
 		""					=> "messages_main.tpl",
-		"admin/submitted"	=> "index.tpl",
+		"admin/submitted"	=> "messages_main.tpl",
+		"post_new"			=> "messages_post.tpl",
 	);
 	
 	/*
@@ -47,7 +49,7 @@ class FrontController
 		$class 		= "controller\\$controllerName";
 		$controller = new $class;
 		$results 	= new \stdClass();
-		
+
 		$controller->run($results);
 		
 		foreach ($results as $key=>$val)

@@ -15,6 +15,7 @@ function createTables()
 	$result = mysql_query("CREATE TABLE Confessions (
 				id INT AUTO_INCREMENT PRIMARY KEY,
 				src_ip INT,
+				author TINYTEXT,
 				title TINYTEXT,
 				body TEXT,
 				timestamp INT
@@ -26,6 +27,7 @@ function createTables()
 	$result = mysql_query("CREATE TABLE ConfessionsSubmitted (
 					id INT AUTO_INCREMENT PRIMARY KEY,
 					src_ip INT,
+					author TINYTEXT,
 					title TINYTEXT,
 					body TEXT,
 					timestamp INT

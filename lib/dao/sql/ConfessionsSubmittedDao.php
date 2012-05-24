@@ -15,8 +15,9 @@ class ConfessionsSubmittedDao {
 	}
 
 	public function insert($ConfessionsSubmitted) {
-		$ps = new PreparedStatement("insert into ConfessionsSubmitted (src_ip, title, body, timestamp) values (?, ?, ?, ?)");
+		$ps = new PreparedStatement("insert into ConfessionsSubmitted (src_ip, author, title, body, timestamp) values (?, ?, ?, ?, ?)");
 		$ps->setInt($ConfessionsSubmitted->src_ip);
+		$ps->setString($ConfessionsSubmitted->author);
 		$ps->setString($ConfessionsSubmitted->title);
 		$ps->setString($ConfessionsSubmitted->body);
 		$ps->setInt($ConfessionsSubmitted->timestamp);
@@ -25,8 +26,9 @@ class ConfessionsSubmittedDao {
 	}
 
 	public function update($ConfessionsSubmitted) {
-		$ps = new PreparedStatement("update ConfessionsSubmitted set src_ip = ?, title = ?, body = ?, timestamp = ? where id = ?");
+		$ps = new PreparedStatement("update ConfessionsSubmitted set src_ip = ?, author = ?, title = ?, body = ?, timestamp = ? where id = ?");
 		$ps->setInt($ConfessionsSubmitted->src_ip);
+		$ps->setString($ConfessionsSubmitted->author);
 		$ps->setString($ConfessionsSubmitted->title);
 		$ps->setString($ConfessionsSubmitted->body);
 		$ps->setInt($ConfessionsSubmitted->timestamp);
@@ -70,6 +72,26 @@ class ConfessionsSubmittedDao {
 
 	public function findBySrc_ip($src_ip, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
 		return $this->findWithPreparedStatement($this->findBySrc_ipPS($src_ip, $queryOperator, $orderBy, $offset, $limit));
+	}
+
+	public function findByAuthorPS($author, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		if (!in_array($queryOperator, ConfessionsSubmittedDao::$ALLOWED_STRING_QUERY_OPERATORS)) $queryOperator = ConfessionsSubmittedDao::$ALLOWED_STRING_QUERY_OPERATORS[0];
+		$sqlQueryOperator = (($queryOperator == 'beginsWith') || ($queryOperator == 'endsWith') || ($queryOperator == 'contains')) ? 'like' : $queryOperator;
+		$ps = new PreparedStatement("select * from ConfessionsSubmitted where author $sqlQueryOperator ?".((($orderBy!==null)&&($orderBy!='')) ? (' order by '.$orderBy) : ''), $offset, $limit);
+		if ($queryOperator == 'beginsWith') {
+			$ps->setString($author.'%');
+		} else if ($queryOperator == 'endsWith') {
+			$ps->setString('%'.$author);
+		} else if ($queryOperator == 'contains') {
+			$ps->setString('%'.$author.'%');
+		} else {
+			$ps->setString($author);
+		}
+		return $ps;
+	}
+
+	public function findByAuthor($author, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		return $this->findWithPreparedStatement($this->findByAuthorPS($author, $queryOperator, $orderBy, $offset, $limit));
 	}
 
 	public function findByTitlePS($title, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {

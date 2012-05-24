@@ -15,8 +15,9 @@ class ConfessionsDao {
 	}
 
 	public function insert($Confessions) {
-		$ps = new PreparedStatement("insert into Confessions (src_ip, title, body, timestamp) values (?, ?, ?, ?)");
+		$ps = new PreparedStatement("insert into Confessions (src_ip, author, title, body, timestamp) values (?, ?, ?, ?, ?)");
 		$ps->setInt($Confessions->src_ip);
+		$ps->setString($Confessions->author);
 		$ps->setString($Confessions->title);
 		$ps->setString($Confessions->body);
 		$ps->setInt($Confessions->timestamp);
@@ -25,8 +26,9 @@ class ConfessionsDao {
 	}
 
 	public function update($Confessions) {
-		$ps = new PreparedStatement("update Confessions set src_ip = ?, title = ?, body = ?, timestamp = ? where id = ?");
+		$ps = new PreparedStatement("update Confessions set src_ip = ?, author = ?, title = ?, body = ?, timestamp = ? where id = ?");
 		$ps->setInt($Confessions->src_ip);
+		$ps->setString($Confessions->author);
 		$ps->setString($Confessions->title);
 		$ps->setString($Confessions->body);
 		$ps->setInt($Confessions->timestamp);
@@ -70,6 +72,26 @@ class ConfessionsDao {
 
 	public function findBySrc_ip($src_ip, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
 		return $this->findWithPreparedStatement($this->findBySrc_ipPS($src_ip, $queryOperator, $orderBy, $offset, $limit));
+	}
+
+	public function findByAuthorPS($author, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		if (!in_array($queryOperator, ConfessionsDao::$ALLOWED_STRING_QUERY_OPERATORS)) $queryOperator = ConfessionsDao::$ALLOWED_STRING_QUERY_OPERATORS[0];
+		$sqlQueryOperator = (($queryOperator == 'beginsWith') || ($queryOperator == 'endsWith') || ($queryOperator == 'contains')) ? 'like' : $queryOperator;
+		$ps = new PreparedStatement("select * from Confessions where author $sqlQueryOperator ?".((($orderBy!==null)&&($orderBy!='')) ? (' order by '.$orderBy) : ''), $offset, $limit);
+		if ($queryOperator == 'beginsWith') {
+			$ps->setString($author.'%');
+		} else if ($queryOperator == 'endsWith') {
+			$ps->setString('%'.$author);
+		} else if ($queryOperator == 'contains') {
+			$ps->setString('%'.$author.'%');
+		} else {
+			$ps->setString($author);
+		}
+		return $ps;
+	}
+
+	public function findByAuthor($author, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {
+		return $this->findWithPreparedStatement($this->findByAuthorPS($author, $queryOperator, $orderBy, $offset, $limit));
 	}
 
 	public function findByTitlePS($title, $queryOperator = '=', $orderBy = null, $offset = 0, $limit = 0) {

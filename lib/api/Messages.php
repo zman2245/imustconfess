@@ -21,7 +21,9 @@ class Messages
 	public function getMessages($offset, $limit, $submissions = false)
 	{
 		$dao = $submissions ? Factory::dao("ConfessionsSubmittedDao") : Factory::dao("ConfessionsDao");
-		return $dao->findAll(null, $offset, $limit);
+		$msgs = $dao->findAll(null, $offset, $limit);
+
+		return $msgs;
 	}
 	
 	/**
@@ -45,14 +47,16 @@ class Messages
 	 * 
 	 * @param $body    The main text of the message
 	 * @param $src_ip  The author's source IP
+	 * @param $author  Optional author of the message
 	 * @param $title   The title of the message
 	 */
-	public function submitMessge($body, $src_ip = null, $title = null)
+	public function submitMessge($body, $src_ip = null, $author = null, $title = null)
 	{
-		$dao = Factory::dao("ConfessionsDao");
+		$dao = Factory::dao("ConfessionsSubmittedDao");
 		$msg = Factory::struct("ConfessionsSubmitted");
 		
 		$msg->body 		= $body;
+		$msg->author    = $author;
 		$msg->src_ip 	= $src_ip;
 		$msg->title 	= $title;
 		$msg->timestamp = time();
